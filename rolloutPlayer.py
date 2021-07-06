@@ -8,7 +8,7 @@ from player import player
 from yieldPlayer import yieldPlayer
 from timeAllocator import timeAllocator
 
-TIME_GIVEN=0.05 #makes it easier to change the time amount
+TIME_GIVEN=0.01 #makes it easier to change the time amount
 
 # helper function to make an imaginary version of the game to play out.
 # Creates with all the information the AI (player 2 in turn order) should know.
@@ -119,7 +119,7 @@ class rolloutPlayer(player):
             #now, the hand has come to an end.
             tryThis=(tryThis+1)%len(legalCards) #move to trying the next card in sequence, or back to the start.
         #okay, so we've collected as much data as we can in one second. Now comes decision time.
-        legalCards.sort(key=lambda entry: entry[2]/entry[1]) #assume each one has been tried at least once, or this will set on fire.
+        legalCards.sort(key=lambda entry: entry[2]/(entry[1]+1)) #assume each one has been tried at least once, or this will set on fire.
         
         #if we are using an allocator, we need to update it with how much time was spent
         if self.allocator != False:
