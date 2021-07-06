@@ -6,6 +6,7 @@ import math as m
 from game import game
 from player import player
 from yieldPlayer import yieldPlayer
+from timeAllocator import timeAllocator
 
 TIME_GIVEN=1.0 #makes it easier to change the time amount
 
@@ -49,7 +50,7 @@ class rolloutPlayer(player):
         if question6 == False: #if not using a time alocator
             self.allocator = False  #save that we're not using one
         else:
-            self.allocator = TimeAllocator(18,priorityMul=1.1) #priority mul says how much more time it should get than "fair" in worst case, so it muls over first moves more.
+            self.allocator = timeAllocator(18,priorityMul=1.1) #priority mul says how much more time it should get than "fair" in worst case, so it muls over first moves more.
 
     def playCard(self, trick,game): # game is only used to make a virtual copy, does not hand look
         if len(self.hand)==0: #check if I'm being asked to play when I can't.
