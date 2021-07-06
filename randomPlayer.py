@@ -1,4 +1,4 @@
-# Imports
+# File Imports
 from player import player
 
 # Class for randomPlayer
@@ -19,7 +19,7 @@ class randomPlayer(player):  # Inherit from Player
             card_idx = next((i for i,c in enumerate(self.hand) if c[0]==suit), None)
             if card_idx != None:
                 return self.hand.pop(card_idx)
-        # If the trick is empty or if we can't follow suit, return anything
+            # If the trick is empty or if we can't follow suit, return anything
         return self.hand.pop()
-# block of helper keys for grab and duck
-# each one places prefered cards at the end of the list,for pop.
+    # block of helper keys for grab and duck
+    # each one places prefered cards at the end of the list,for pop.

@@ -18,21 +18,20 @@ from game import game
 # How Arguments Work
 # python3 Monster.py quiteMode AIplayerType seed
 # quiteMode - 0 or 1
-# AIplayerType - 0, 1, 2, 3, 4 for random, grab and duck, rollouts, MCTS, perform comparison on 20 games each
-# vsType 0 or 1, 0 for opponents random, 1 for opnents doing grab and duck
+# AIplayerType - 0, 1, 2, 3, 4 for random, grab and duck, rollouts, mcts, perform comparison
+# vsType 0 or 1, 0 for opponents random, 1 for grab and duck
 # seed - any text, optional
 
 # Right Number of Arguments
 numArgs = len(sys.argv[1:])
 if numArgs < 2:
-    print("Wrong number of arguments.") #maybe make it so this lets you input it on run time instead of quitting? Would be useful for running in IDLE
+    print("Wrong number of arguments.") 
     exit()
 
-# AI selection
+# AI and Enemy selection
 AIselection = sys.argv[2]
-#enemy selection
 vsType = sys.argv[3]
-    
+
 # Quite mode?
 if sys.argv[1] == '1':
     qMode = True
@@ -41,57 +40,53 @@ else:
     
 # Set Seeds
 if numArgs >= 4:
-    seed=sys.argv[4]
+    random.seed(sys.argv[4])
 else:
-    seed=""
-
-if seed=="":
     random.seed()
-else:
-    random.seed(seed)
-                            
+    
 # Select kind of player up against, by defining "EnemyPlayer" to mean one of two classes
-enemyPlayer=randomPlayer
 if vsType == '0': 
-    pass #no change here
+    enemyPlayer=randomPlayer
 elif vsType == '1':
     enemyPlayer=grabAndDuckPlayer
 else:
     print("Bad player type! Must be 0 or 1")
     exit()
-# Code for Playing Games
-if AIselection == '5':
-    Games=20 #only says to play 20 games, not 200
+    # Code for Playing Games
 
+# Determine what kind of results to return
+if AIselection == '4':
+    Games=20
+    
 #    MctsResults=0
 #    for i in range(Games):
-#        playahs = []
-#        playahs.append(enemyPlayer("Foo"))
-#        playahs.append(mctsPlayer("AI"))
-#        playahs.append(enemyPlayer("Bar"))
-#        theGame = game(playahs)
+#        players = []
+#        players.append(enemyPlayer("Foo"))
+#        players.append(mctsPlayer("AI"))
+#        players.append(enemyPlayer("Bar"))
+#        theGame = game(players)
 #
 #        if theGame.play()[0] == "AI":
 #            MctsResults+=1
 
     GDResults=0
     for i in range(Games):
-        playahs = []
-        playahs.append(enemyPlayer("Foo"))
-        playahs.append(grabAndDuckPlayer("AI"))
-        playahs.append(enemyPlayer("Bar"))
-        theGame = game(playahs)
+        players = []
+        players.append(enemyPlayer("Foo"))
+        players.append(grabAndDuckPlayer("AI"))
+        players.append(enemyPlayer("Bar"))
+        theGame = game(players)
 
         if theGame.play()[0] == "AI":
             GDResults+=1
 
     RResults=0
     for i in range(Games):
-        playahs = []
-        playahs.append(enemyPlayer("Foo"))
-        playahs.append(rolloutPlayer("AI"))
-        playahs.append(enemyPlayer("Bar"))
-        theGame = game(playahs)
+        players = []
+        players.append(enemyPlayer("Foo"))
+        players.append(rolloutPlayer("AI"))
+        players.append(enemyPlayer("Bar"))
+        theGame = game(players)
 
         if theGame.play()[0] == "AI":
             RResults+=1
@@ -100,19 +95,19 @@ if AIselection == '5':
     print("Grab And Duck AI win rate: ", 100*GDResults/Games,"% or",GDResults,"over",Games)
     print("Rollout AI win rate: ", 100*RResults/Games,"% or",RResults,"over",Games)
 else:
-    playahs = []
-    playahs.append(enemyPlayer("Foo"))
+    players = []
+    players.append(enemyPlayer("Foo"))
 
     if AIselection == '0':
-        playahs.append(randomPlayer("AI"))
+        players.append(randomPlayer("AI"))
     elif AIselection == '1':
-        playahs.append(grabAndDuckPlayer("AI"))
+        players.append(grabAndDuckPlayer("AI"))
     elif AIselection == '2':
-        playahs.append(rolloutPlayer("AI"))
+        players.append(rolloutPlayer("AI"))
     else:
-        playahs.append(mctsPlayer("AI"))
-    
-    playahs.append(enemyPlayer("Bar")) 
-    theGame = game(playahs) #potentially make it play more than one?
+        players.append(mctsPlayer("AI"))
+        
+    players.append(enemyPlayer("Bar")) 
+    theGame = game(players) 
 
     print(theGame.play())

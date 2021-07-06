@@ -1,4 +1,4 @@
-# Imports
+# General Imports
 import abc
 
 # Class for player
@@ -16,5 +16,5 @@ class player(metaclass=abc.ABCMeta):          # This is an abstract base class.
     @abc.abstractmethod
     def playCard(self):
         pass
-# a player who shows legal cards instead of playing one.
-# this only works if yieldMode is true
+    # a player who shows legal cards instead of playing one.
+    # this only works if yieldMode is true

@@ -1,4 +1,4 @@
-# Imports
+# File Imports
 from player import player
 
 # Class of yieldPlayer
@@ -15,14 +15,14 @@ class yieldPlayer(player):
             for card in self.hand:
                 if card[0]==suit:
                     legalCards.append(card)
-            # if it has anything, reveal only the legal cards.
+                    # if it has anything, reveal only the legal cards.
             if len(legalCards)>0:
                 return legalCards
-        # If the trick is empty or if we can't follow suit, reveal hand
+            # If the trick is empty or if we can't follow suit, reveal hand
         return self.hand
 
     # special function only used by this class.
     def removeCard(self,card):
         if card not in self.hand:
             print("Err!",card,"not in",self.hand)
-        self.hand.remove(card) # there should be only 1
+            self.hand.remove(card) # there should be only 1

@@ -29,7 +29,7 @@ class game:  # Main class
         for i in range(self.HAND_SIZE):
             for p in self.players:
                 p.hand.append(self.deck.getCard())
-    
+                
     def dealSpecial(self,knownHand,playedCards,currentTrick):
         # deals out a virtual set of cards to players, except for the player about to play,
         # who gets the knownHand. Assumes first player goes first this trick.
@@ -49,7 +49,7 @@ class game:  # Main class
             # if we are the third player, then remove one from the second player as well.
             # If we're the first player, neither if statement happens
             handSizes[1]-=1
-        # Deal the hands.
+            # Deal the hands.
         for pIndex in range(3):
             if pIndex == len(currentTrick): # if this is our known hand,
                 self.players[1].hand=knownHand.copy() #player 2 always gets it
@@ -58,7 +58,7 @@ class game:  # Main class
             playerHand=[] # otherwise, get ready to fill a hand, then give it to them
             while len(playerHand) < handSizes[pIndex]:
                 playerHand.append(self.deck.getCard())
-            self.players[(pIndex-len(currentTrick)+4)%3].hand=playerHand.copy() # make it a copy just in case. The shift is so that it will deal the leader of the current trick first, always.
+                self.players[(pIndex-len(currentTrick)+4)%3].hand=playerHand.copy() # make it a copy just in case. The shift is so that it will deal the leader of the current trick first, always.
 
     def scoreTrick(self, trick):
         # Score the trick and add the score to the winning player
@@ -72,15 +72,15 @@ class game:  # Main class
             if trick[i+1][0] == suit and trick[i+1][1] > value:
                 winner = i+1
                 value = trick[i+1][1]
-        # Determine the score
-        # Separate the suit and value tuples
+                # Determine the score
+                # Separate the suit and value tuples
         suits_list = list(zip(*trick))[0]
         if suits_list.count('T') == 0:
             # No Trolls, go ahead and score the unicorns
             score += suits_list.count('U') * 3
-        score += suits_list.count('F') * 2
-        n_zomb = suits_list.count('Z')
-        score -= n_zomb
+            score += suits_list.count('F') * 2
+            n_zomb = suits_list.count('Z')
+            score -= n_zomb
         return winner, score, n_zomb  # Index of winning card
     
     def playHand(self,leader=0,trick=[]):
@@ -124,7 +124,7 @@ class game:  # Main class
                 # Subtract 20 points from each opponent
                 for i in range(len(self.players)-1):
                     self.players[(leader+1+i) % len(self.players)].score -= self.ZOMBIE_ARMY_PENALTY
-            
+                    
             # Update score & check if won
             self.players[leader].score += score
             if self.players[leader].score >= self.WIN_SCORE:
@@ -135,7 +135,7 @@ class game:  # Main class
             # Keep track of the cards played
             self.played_cards.extend(trick)
             trick=[] # now clear the trick, for the next loop.
-        
+            
         # Score the kitty (undealt cards)
         self.slp(self.deck)
         win_idx, score, n_zomb = self.scoreTrick(self.deck.deck)
@@ -147,7 +147,7 @@ class game:  # Main class
             # Subtract 20 points from each opponent
             for i in range(len(self.players)-1):
                 self.players[(leader+1+i) % len(self.players)].score -= self.ZOMBIE_ARMY_PENALTY
-        # Check for winner
+                # Check for winner
         if self.players[leader].score >= self.WIN_SCORE:
             self.slp(self.players[leader].name, "won with", self.players[leader].score, "points!")
             yield (True, True,leader) # yes, the hand ends, yes there's a winner, and it is leader
@@ -174,6 +174,6 @@ class game:  # Main class
             # reset the zombie count
             for p in self.players:
                 p.zombie_count = 0
-            # reset the played cards so they represet this hand
+                # reset the played cards so they represet this hand
             self.played_cards=[]
             lead_player=result[2] # get the leader of the last hand
