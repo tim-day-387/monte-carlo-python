@@ -1,11 +1,71 @@
 # File Imports
 from player import player
 
+# Static Method
+def trollKey(card):
+    if card[0]=="T": # is this a troll?
+        ret=1500 # ensures legal moves triumph if possible
+        if card[1]>0: # ensures that ones that beat rank above those that don't
+            ret+=100
+        ret-=card[1] # prioritizes lowest possible
+    elif card[0]=="Z":
+        ret=1000+card[1]
+    elif card[0]=="F":
+        ret=500-card[1]
+    else:
+        ret=-card[1]
+    return ret
+
+# Static Method
+def zombieKey(card):
+    if card[0]=="Z":
+        ret=1500 # ensures legal moves triumph if possible
+        if card[1]<0: # ensures that ones that lose rank above those that don't
+            ret+=100
+        ret+=card[1] # prioritizes highest possible
+    elif card[0]=="T":
+        ret=1000-card[1]
+    elif card[0]=="F":
+        ret=500-card[1]
+    else:
+        ret=-card[1]
+    return ret
+
+# Static Method
+def fairyKey(card):
+    if card[0]=="F":
+        ret=1500 # ensures legal moves triumph if possible
+        if card[1]>0: # ensures that ones that beat rank above those that don't
+            ret+=100
+        ret-=card[1] # prioritizes lowest possible
+    elif card[0]=="Z":
+        ret=1000+card[1]
+    elif card[0]=="T":
+        ret=500-card[1]
+    else:
+        ret=-card[1]
+    return ret
+
+# Static Method
+def unicornKey(card):
+    if card[0]=="U":
+        ret=1500 # ensures legal moves triumph if possible
+        if card[1]>0: # ensures that ones that beat rank above those that don't
+            ret+=100
+        ret-=card[1] # prioritizes lowest possible
+    elif card[0]=="T":
+        ret=1000-card[1]
+    elif card[0]=="Z":
+        ret=500+card[1]
+    else:
+        ret=-card[1]
+    return ret
+
 # Class for grabAndDuckPlayer
 class grabAndDuckPlayer(player):
     def __init__(self, name):
         super().__init__(name)
-
+        
     def playCard(self, trick,game):
         # added the game itself, since the AI needs that, even if it isn't used here.
         if len(trick) != 0:
@@ -81,63 +141,3 @@ class grabAndDuckPlayer(player):
             card=("U",highestUnicorn)
             self.hand.remove(card)
             return card
-
-    @staticmethod
-    def trollKey(card):
-        if card[0]=="T": # is this a troll?
-            ret=1500 # ensures legal moves triumph if possible
-        if card[1]>0: # ensures that ones that beat rank above those that don't
-            ret+=100
-            ret-=card[1] # prioritizes lowest possible
-        elif card[0]=="Z":
-            ret=1000+card[1]
-        elif card[0]=="F":
-            ret=500-card[1]
-        else:
-            ret=-card[1]
-        return ret
-
-    @staticmethod
-    def zombieKey(card):
-        if card[0]=="Z":
-            ret=1500 # ensures legal moves triumph if possible
-        if card[1]<0: # ensures that ones that lose rank above those that don't
-            ret+=100
-            ret+=card[1] # prioritizes highest possible
-        elif card[0]=="T":
-            ret=1000-card[1]
-        elif card[0]=="F":
-            ret=500-card[1]
-        else:
-            ret=-card[1]
-        return ret
-
-    @staticmethod
-    def fairyKey(card):
-        if card[0]=="F":
-            ret=1500 # ensures legal moves triumph if possible
-        if card[1]>0: # ensures that ones that beat rank above those that don't
-            ret+=100
-            ret-=card[1] # prioritizes lowest possible
-        elif card[0]=="Z":
-            ret=1000+card[1]
-        elif card[0]=="T":
-            ret=500-card[1]
-        else:
-            ret=-card[1]
-        return ret
-
-    @staticmethod
-    def unicornKey(card):
-        if card[0]=="U":
-            ret=1500 # ensures legal moves triumph if possible
-        if card[1]>0: # ensures that ones that beat rank above those that don't
-            ret+=100
-            ret-=card[1] # prioritizes lowest possible
-        elif card[0]=="T":
-            ret=1000-card[1]
-        elif card[0]=="Z":
-            ret=500+card[1]
-        else:
-            ret=-card[1]
-        return ret

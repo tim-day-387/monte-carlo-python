@@ -78,9 +78,9 @@ class game:  # Main class
         if suits_list.count('T') == 0:
             # No Trolls, go ahead and score the unicorns
             score += suits_list.count('U') * 3
-            score += suits_list.count('F') * 2
-            n_zomb = suits_list.count('Z')
-            score -= n_zomb
+        score += suits_list.count('F') * 2
+        n_zomb = suits_list.count('Z')
+        score -= n_zomb
         return winner, score, n_zomb  # Index of winning card
     
     def playHand(self,leader=0,trick=[]):
