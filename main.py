@@ -80,20 +80,20 @@ if AIselection == '4':
         if theGame.play()[0] == "AI":
             GDResults+=1
 
-#    RResults=0
-#    for i in range(Games):
-#        players = []
-#        players.append(enemyPlayer("Foo"))
-#        players.append(rolloutPlayer("AI"))
-#        players.append(enemyPlayer("Bar"))
-#        theGame = game(players)
-#
-#        if theGame.play()[0] == "AI":
-#            RResults+=1
+    RResults=0
+    for i in range(Games):
+        players = []
+        players.append(enemyPlayer("Foo"))
+        players.append(rolloutPlayer("AI"))
+        players.append(enemyPlayer("Bar"))
+        theGame = game(players)
+
+        if theGame.play()[0] == "AI":
+            RResults+=1
             
 #    print("MTCS AI win rate: ", 100*MctsResults/Games,"% or",MctsResults,"over",Games)
     print("Grab And Duck AI win rate: ", 100*GDResults/Games,"% or",GDResults,"over",Games)
-#    print("Rollout AI win rate: ", 100*RResults/Games,"% or",RResults,"over",Games)
+    print("Rollout AI win rate: ", 100*RResults/Games,"% or",RResults,"over",Games)
 else:
     players = []
     players.append(enemyPlayer("Foo"))

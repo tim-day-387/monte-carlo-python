@@ -58,7 +58,7 @@ class game:  # Main class
             playerHand=[] # otherwise, get ready to fill a hand, then give it to them
             while len(playerHand) < handSizes[pIndex]:
                 playerHand.append(self.deck.getCard())
-                self.players[(pIndex-len(currentTrick)+4)%3].hand=playerHand.copy() # make it a copy just in case. The shift is so that it will deal the leader of the current trick first, always.
+            self.players[(pIndex-len(currentTrick)+4)%3].hand=playerHand.copy() # make it a copy just in case. The shift is so that it will deal the leader of the current trick first, always.
 
     def scoreTrick(self, trick):
         # Score the trick and add the score to the winning player

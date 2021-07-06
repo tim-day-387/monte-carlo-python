@@ -8,7 +8,40 @@ from player import player
 from yieldPlayer import yieldPlayer
 from timeAllocator import timeAllocator
 
-TIME_GIVEN=1.0 #makes it easier to change the time amount
+TIME_GIVEN=0.05 #makes it easier to change the time amount
+
+# helper function to make an imaginary version of the game to play out.
+# Creates with all the information the AI (player 2 in turn order) should know.
+# Returns the random state and a generator to use for the AI to play with.
+def makeVirtualGameCopy(currGame,thisTrick):
+    # make a virtual game with 3 players with set names (to aid in debug)
+    alice=yieldPlayer("alice")
+    me =yieldPlayer("me")
+    bob =yieldPlayer("bob")
+    virPlayers=[alice,me,bob]
+    # make the scores and zombie_count match
+    for i in range(3):
+        virPlayers[i].score=currGame.players[i].score
+        virPlayers[i].zombie_count=currGame.players[i].zombie_count
+        # get my hand and played cards 
+    myHand=currGame.players[1].hand
+    playedCards=currGame.played_cards
+    # now, make the game.
+    newGame=game(virPlayers,yieldMode=True,quietMode=True)
+    # deal the cards
+    newGame.dealSpecial(myHand,playedCards,thisTrick)
+    # Randomly deal the unknown cards, while keeping the known cards with me.
+    #for i in range(3):
+    #    print("player",i,"'s hand:",newGame.players[i].hand)
+    # save alice and bob's starting hands
+    aliceHand=frozenset(newGame.players[0].hand)
+    bobHand=frozenset(newGame.players[2].hand)
+    # figure out the leader
+    lead=(4-len(thisTrick))%3
+    # if the currentTrick is empty, we (1) are the leader. if there are two cards, bob must have lead.
+    # create the generator
+    gen = newGame.playHand(leader=lead,trick=thisTrick.copy()) # we copy the trick just in case
+    return (gen,aliceHand,bobHand)
 
 # Class for mctsPlayer
 class mctsPlayer(player):
@@ -184,37 +217,3 @@ class mctsPlayer(player):
         #print(endCard,self.hand,tree.keys())
         self.hand.remove(endCard)
         return endCard#return the card we decided on
-
-    # helper function to make an imaginary version of the game to play out.
-    # Creates with all the information the AI (player 2 in turn order) should know.
-    # Returns the random state and a generator to use for the AI to play with.
-    @staticmethod
-    def makeVirtualGameCopy(currGame,thisTrick):
-        # make a virtual game with 3 players with set names (to aid in debug)
-        alice=yieldPlayer("alice")
-        me =yieldPlayer("me")
-        bob =yieldPlayer("bob")
-        virPlayers=[alice,me,bob]
-        # make the scores and zombie_count match
-        for i in range(3):
-            virPlayers[i].score=currGame.players[i].score
-            virPlayers[i].zombie_count=currGame.players[i].zombie_count
-            # get my hand and played cards 
-        myHand=currGame.players[1].hand
-        playedCards=currGame.played_cards
-        # now, make the game.
-        newGame=game(virPlayers,yieldMode=True,quietMode=True)
-        # deal the cards
-        newGame.dealSpecial(myHand,playedCards,thisTrick)
-        # Randomly deal the unknown cards, while keeping the known cards with me.
-        #for i in range(3):
-        #    print("player",i,"'s hand:",newGame.players[i].hand)
-        # save alice and bob's starting hands
-        aliceHand=frozenset(newGame.players[0].hand)
-        bobHand=frozenset(newGame.players[2].hand)
-        # figure out the leader
-        lead=(4-len(thisTrick))%3
-        # if the currentTrick is empty, we (1) are the leader. if there are two cards, bob must have lead.
-        # create the generator
-        gen = newGame.playHand(leader=lead,trick=thisTrick.copy()) # we copy the trick just in case
-        return (gen,aliceHand,bobHand)
