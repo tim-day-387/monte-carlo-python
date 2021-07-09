@@ -58,8 +58,8 @@ def playGames(numGames, playerAI, enemyAI):
 
 # Produce all reports for numGames
 def playAll(numGames):
-    for enemyAI in range(0,2):
-        for playerAI in range(0,1):
+    for playerAI in range(0,3):
+        for enemyAI in range(0,2):
             playGames(numGames, playerAI, enemyAI)
 
 # Set Seeds
