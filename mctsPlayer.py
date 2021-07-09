@@ -52,7 +52,7 @@ class mctsPlayer(player):
         else:
             self.allocator = timeAllocator(18,priorityMul=1.1) #priority mul says how much more time it should get than "fair" in worst case, so it muls over first moves more.
         self.explore=800 #the explore parameter, it's 800 since a win is +200, and a loss is -200, rather than a win being 1 and a loss being 0. Might be the wrong call.
-        self.barfMode=True #do I go print out where the deepest node with 10 observations is, or keep quiet?
+        self.barfMode=False #do I go print out where the deepest node with 10 observations is, or keep quiet?
     #helpers
     def ucb(self,totalScore,parentSimulations,thisSimulation):
         mean=totalScore/thisSimulation
