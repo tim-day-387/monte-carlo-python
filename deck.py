@@ -3,26 +3,51 @@ import random
 
 # Class for deck
 class deck():
+    # Constructor
     def __init__(self,exceptFor=None):
+        # Create deck
         self.deck = []
-        self.shuffle(exceptFor)
+
+        # Populate
+        self.newDeck()
         
+        # Shuffle deck
+        self.shuffle(exceptFor)
+
+    # Print the list without the brackets
     def __str__(self):
-        # Print the list without the brackets
         return str(self.deck).strip('[]')
-    
-    def shuffle(self,exceptFor=None): 
-        self.deck = []
-        if exceptFor is None:                 # if not given any exceptions
-            skipCards=set()                   # make the set of cards to skip empty.
+
+    # Shuffle the deck - minus excluded cards
+    def shuffle(self,exceptFor=None):
+        # Create a new deck
+        self.newDeck();
+        
+        # Check if cards should be exclude
+        if exceptFor is None:
+            random.shuffle(self.deck)
         else:
-            skipCards=set(exceptFor)          # if it's not a set, make it one. 
+            skipCards=set(exceptFor)
+
+            # Exclude cards
+            self.deck = list(set(self.deck).difference(skipCards))
+
+            # Shuffle cards
+            random.shuffle(self.deck)
+            
+        return
+
+    # Reset deck
+    def newDeck(self):
+        # Create deck
+        self.deck = []
+
+        # Populate
         for suit in ['U','F','Z','T']:
             for i in range(15):
-                card=(suit,i)                 # turn this into a card, to compare with the set.
-                if card not in skipCards:     # if skipCards is empty, then don't skip anything.
-                    self.deck.append(card)
-        random.shuffle(self.deck)
-                    
+                card=(suit,i)  
+                self.deck.append(card)
+
+    # Take a card from the deck
     def getCard(self):
         return self.deck.pop()

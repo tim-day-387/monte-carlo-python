@@ -63,7 +63,8 @@ def playGames(numGames, playerAI, enemyAI):
         selectionList.append(selectedAI)
 
     # Perform multiprocessing
-    pool = Pool(processes = numGames*2)
+    totalProcs = min(numGames*2, 256)
+    pool = Pool(processes = totalProcs)
     outputs = pool.map(playGame, selectionList)
     results = sum(outputs)
 
@@ -96,4 +97,5 @@ else:
     random.seed("bababooey")
             
 # Produce report
-playAll(100)
+playAll(20)
+
