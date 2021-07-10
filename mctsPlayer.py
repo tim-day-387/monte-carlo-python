@@ -8,7 +8,7 @@ from player import player
 from yieldPlayer import yieldPlayer
 from timeAllocator import timeAllocator
 
-TIME_GIVEN=0.05 #makes it easier to change the time amount
+TIME_GIVEN=0.01 #makes it easier to change the time amount
 
 # helper function to make an imaginary version of the game to play out.
 # Creates with all the information the AI (player 2 in turn order) should know.

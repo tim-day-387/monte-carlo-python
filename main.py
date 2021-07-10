@@ -54,15 +54,21 @@ def playGames(numGames, playerAI, enemyAI):
     results = 0
     selectedAI = [playerAI, enemyAI];
 
+    # Start Timer
+    timeElapsed = time.perf_counter()
+    
     # Create list of AI selections for multiprocessing
     selectionList = []
     for _ in range(numGames):
         selectionList.append(selectedAI)
 
     # Perform multiprocessing
-    pool = Pool(processes = 1)
+    pool = Pool(processes = numGames*2)
     outputs = pool.map(playGame, selectionList)
     results = sum(outputs)
+
+    # End Timer
+    timeElapsed = time.perf_counter() - timeElapsed
     
     # Decide playerAI type
     if playerAI == 0:
@@ -74,7 +80,8 @@ def playGames(numGames, playerAI, enemyAI):
 
     # Return results
     print("AI win rate: ", 100*(results/numGames),"% or",results,"over",numGames)
-
+    print("Time: ", timeElapsed)
+          
 # Produce all reports for numGames
 def playAll(numGames):
     for playerAI in range(0,3):
