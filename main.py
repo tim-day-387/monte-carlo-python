@@ -4,6 +4,7 @@ import abc
 import time
 import sys
 import math as m
+from multiprocessing import Pool
 
 # File Imports
 from player import player
@@ -14,10 +15,12 @@ from grabAndDuckPlayer import grabAndDuckPlayer
 from mctsPlayer import mctsPlayer
 from deck import deck
 from game import game
-    
-# Return results of a set of games
-def playGames(numGames, playerAI, enemyAI):
-    Results=0
+
+# Play one game
+def playGame(selectedAI):
+    result = 0
+    playerAI = selectedAI[0]
+    enemyAI = selectedAI[1]
 
     # Decide enemyAI
     if enemyAI == 0:
@@ -26,25 +29,41 @@ def playGames(numGames, playerAI, enemyAI):
         enemyPlayer=grabAndDuckPlayer
 
     # Create games and play them
-    for i in range(numGames):
-        players = []
-        players.append(enemyPlayer("Foo"))
+    players = []
+    players.append(enemyPlayer("Foo"))
 
-        # Decide playerAI type
-        if playerAI == 0:
-            players.append(grabAndDuckPlayer("AI"))
-        elif playerAI == 1:
-            players.append(rolloutPlayer("AI"))
-        else:
-            players.append(mctsPlayer("AI"))
+    # Decide playerAI type
+    if playerAI == 0:
+        players.append(grabAndDuckPlayer("AI"))
+    elif playerAI == 1:
+        players.append(rolloutPlayer("AI"))
+    else:
+        players.append(mctsPlayer("AI"))
             
-        players.append(enemyPlayer("Bar"))
-        theGame = game(players)
+    players.append(enemyPlayer("Bar"))
+    theGame = game(players)
 
-        # Record results if playerAI wins
-        if theGame.play()[0] == "AI":
-            Results+=1
+    # Record result if playerAI wins
+    if theGame.play()[0] == "AI":
+        result += 1
 
+    return result
+    
+# Return results of a set of games
+def playGames(numGames, playerAI, enemyAI):
+    results = 0
+    selectedAI = [playerAI, enemyAI];
+
+    # Create list of AI selections for multiprocessing
+    selectionList = []
+    for _ in range(numGames):
+        selectionList.append(selectedAI)
+
+    # Perform multiprocessing
+    pool = Pool(processes = 1)
+    outputs = pool.map(playGame, selectionList)
+    results = sum(outputs)
+    
     # Decide playerAI type
     if playerAI == 0:
         print("** Grab And Duck **")
@@ -54,7 +73,7 @@ def playGames(numGames, playerAI, enemyAI):
         print("****** MCTS *******")
 
     # Return results
-    print("AI win rate: ", 100*(Results/numGames),"% or",Results,"over",numGames)
+    print("AI win rate: ", 100*(results/numGames),"% or",results,"over",numGames)
 
 # Produce all reports for numGames
 def playAll(numGames):
