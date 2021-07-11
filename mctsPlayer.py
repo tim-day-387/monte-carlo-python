@@ -8,18 +8,24 @@ from player import player
 from yieldPlayer import yieldPlayer
 from timeAllocator import timeAllocator
 
-TIME_GIVEN=0.01 #makes it easier to change the time amount
-
 # Class for mctsPlayer
 class mctsPlayer(player):
-    def __init__(self, name,question6=False):
+    def __init__(self, name, TIME_GIVEN, timeAlloc = False):
+        # Inherit
         super().__init__(name)
-        if question6 == False: #if not using a time alocator
-            self.allocator = False  #save that we're not using one
+
+        # Do we use time allocator?
+        if timeAlloc == False: 
+            self.allocator = False 
         else:
-            self.allocator = timeAllocator(18,priorityMul=1.1) #priority mul says how much more time it should get than "fair" in worst case, so it muls over first moves more.
-        self.explore=800 #the explore parameter, it's 800 since a win is +200, and a loss is -200, rather than a win being 1 and a loss being 0. Might be the wrong call.
-        self.barfMode=False #do I go print out where the deepest node with 10 observations is, or keep quiet?
+            # priorityMul => how much more time given than "fair" in worst case
+            self.allocator = timeAllocator(18,priorityMul=1.1)
+
+        # Set remaining parameters
+        self.explore = 800 
+        self.barfMode = False
+        self.TIME_GIVEN = TIME_GIVEN
+        
     #helpers
     def ucb(self,totalScore,parentSimulations,thisSimulation):
         mean=totalScore/thisSimulation
@@ -87,7 +93,7 @@ class mctsPlayer(player):
         if len(self.hand)==1:
             return self.hand.pop()
         if self.allocator==False: #if we're not using the question 6 allocator,
-            terminateBy=time.process_time()+TIME_GIVEN # set a timer for one TIME GIVEN
+            terminateBy=time.process_time()+self.TIME_GIVEN # set a timer for one TIME GIVEN
         else:
             if len(self.hand)==18: #if our hand is full
                 self.allocator.reset() #reset our time allocator.

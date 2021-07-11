@@ -8,22 +8,27 @@ from player import player
 from yieldPlayer import yieldPlayer
 from timeAllocator import timeAllocator
 
-TIME_GIVEN=0.01 #makes it easier to change the time amount
-
 # Class for rolloutPlayer
 class rolloutPlayer(player):
-    def __init__(self, name,question6=False):
+    def __init__(self, name, TIME_GIVEN, timeAlloc = False):
+        # Inherit
         super().__init__(name)
-        if question6 == False: #if not using a time alocator
-            self.allocator = False  #save that we're not using one
+
+        # Do we use time allocator?
+        if timeAlloc == False: 
+            self.allocator = False  
         else:
-            self.allocator = timeAllocator(18,priorityMul=1.1) #priority mul says how much more time it should get than "fair" in worst case, so it muls over first moves more.
+            # priorityMul => how much more time given than "fair" in worst case
+            self.allocator = timeAllocator(18,priorityMul=1.1)
+
+        # Set remaining parameters
+        self.TIME_GIVEN = TIME_GIVEN
 
     def playCard(self, trick,game): # game is only used to make a virtual copy, does not hand look
         if len(self.hand)==0: #check if I'm being asked to play when I can't.
             raise Exception("My hand is empty, why are you asking for a card?")
         if self.allocator==False: #if we're not using the question 6 allocator,
-            terminateBy=time.process_time()+TIME_GIVEN # set a timer for one TIME GIVEN
+            terminateBy=time.process_time()+self.TIME_GIVEN # set a timer for one TIME GIVEN
         else:
             if len(self.hand)==18: #if our hand is full
                 self.allocator.reset() #reset our time allocator.

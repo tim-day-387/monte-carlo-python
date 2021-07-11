@@ -36,9 +36,9 @@ def playGame(selectedAI):
     if playerAI == 0:
         players.append(grabAndDuckPlayer("AI"))
     elif playerAI == 1:
-        players.append(rolloutPlayer("AI"))
+        players.append(rolloutPlayer("AI", 0.01))
     else:
-        players.append(mctsPlayer("AI"))
+        players.append(mctsPlayer("AI", 0.01))
             
     players.append(enemyPlayer("Bar"))
     theGame = game(players)
@@ -97,5 +97,5 @@ else:
     random.seed("bababooey")
             
 # Produce report
-playGames(10, 2, 0)
+playAll(10)
 
