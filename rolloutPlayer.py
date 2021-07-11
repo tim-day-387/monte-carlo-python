@@ -10,39 +10,6 @@ from timeAllocator import timeAllocator
 
 TIME_GIVEN=0.01 #makes it easier to change the time amount
 
-# helper function to make an imaginary version of the game to play out.
-# Creates with all the information the AI (player 2 in turn order) should know.
-# Returns the random state and a generator to use for the AI to play with.
-def makeVirtualGameCopy(currGame,thisTrick):
-    # make a virtual game with 3 players with set names (to aid in debug)
-    alice=yieldPlayer("alice")
-    me =yieldPlayer("me")
-    bob =yieldPlayer("bob")
-    virPlayers=[alice,me,bob]
-    # make the scores and zombie_count match
-    for i in range(3):
-        virPlayers[i].score=currGame.players[i].score
-        virPlayers[i].zombie_count=currGame.players[i].zombie_count
-        # get my hand and played cards 
-    myHand=currGame.players[1].hand
-    playedCards=currGame.played_cards
-    # now, make the game.
-    newGame=game(virPlayers,yieldMode=True,quietMode=True)
-    # deal the cards
-    newGame.dealSpecial(myHand,playedCards,thisTrick)
-    # Randomly deal the unknown cards, while keeping the known cards with me.
-    #for i in range(3):
-    #    print("player",i,"'s hand:",newGame.players[i].hand)
-    # save alice and bob's starting hands
-    aliceHand=frozenset(newGame.players[0].hand)
-    bobHand=frozenset(newGame.players[2].hand)
-    # figure out the leader
-    lead=(4-len(thisTrick))%3
-    # if the currentTrick is empty, we (1) are the leader. if there are two cards, bob must have lead.
-    # create the generator
-    gen = newGame.playHand(leader=lead,trick=thisTrick.copy()) # we copy the trick just in case
-    return (gen,aliceHand,bobHand)
-
 # Class for rolloutPlayer
 class rolloutPlayer(player):
     def __init__(self, name,question6=False):
@@ -68,7 +35,7 @@ class rolloutPlayer(player):
         #Set to +200 if I win on the hand, set to -200 if I lose on the hand, as winning or losing on the spot is way more important than next round.
         tryThis=0 #which index in the list should we start with this time?
         while time.process_time() < terminateBy: # loop until time has finished.
-            temp = makeVirtualGameCopy(game,trick) #Note, this also returns the imagined hands of Alice and Bob, but we can get rid of those
+            temp = game.makeVirtualGameCopy(trick) #Note, this also returns the imagined hands of Alice and Bob, but we can get rid of those
             gameGen = temp[0] #Get the game generator object.
             del temp #get rid of temporary object. may remove if it causes problems
             if len(legalCards)==0: #if we don't know what cards are legal, find out.

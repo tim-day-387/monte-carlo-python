@@ -97,5 +97,5 @@ else:
     random.seed("bababooey")
             
 # Produce report
-playAll(20)
+playGames(10, 2, 0)
 

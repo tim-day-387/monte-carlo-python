@@ -3,6 +3,7 @@ import random
 
 # File Imports
 from deck import deck
+from yieldPlayer import yieldPlayer
 
 # Class for game
 class game:  # Main class
@@ -10,13 +11,42 @@ class game:  # Main class
         self.deck = deck()
         self.players = players
         self.played_cards = []  # List of already played cards in this hand
-        self.yieldM=yieldMode   # should I yield? Only use with "yieldPlayers", which are used for AI. Very important this is False otherwise
+        self.yieldM=yieldMode   # Should I yield? Only use with "yieldPlayers"
         self.quiet=quietMode    # setting this to true makes it not print anything.
         self.HAND_SIZE = 18
         self.ZOMBIE_ARMY = 12
         self.ZOMBIE_ARMY_PENALTY = 20
         self.WIN_SCORE = 200
         
+    # Helper function to make an imaginary version of the game
+    def makeVirtualGameCopy(self, thisTrick):
+        # Make virtual players
+        virPlayers = [yieldPlayer("alice"), yieldPlayer("me"), yieldPlayer("bob")]
+        
+        # Get the scores and zombie_count
+        for i in range(3):
+            virPlayers[i].score = self.players[i].score
+            virPlayers[i].zombie_count = self.players[i].zombie_count
+            
+        # Get hand and played cards 
+        myHand = self.players[1].hand
+        playedCards = self.played_cards
+
+        # Make new game, deal cards
+        newGame = game(virPlayers, yieldMode = True, quietMode = True)
+        newGame.dealSpecial(myHand, playedCards, thisTrick)
+
+        # Save alice and bob's starting hands
+        aliceHand = frozenset(newGame.players[0].hand)
+        bobHand = frozenset(newGame.players[2].hand)
+
+        # Figure out the leader (currentTrick empty => we lead, two cards => bob leads)
+        lead = (4-len(thisTrick))%3
+        
+        # Create generator
+        gen = newGame.playHand(leader = lead, trick = thisTrick.copy()) 
+        return (gen,aliceHand,bobHand)
+    
     def slp(self,*args,**kwargs): # "sleepy print" helper function, acts exactly like print if quiet mode is off, does nothing if it is on.
         if self.quiet:
             return
