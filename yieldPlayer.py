@@ -3,26 +3,36 @@ from player import player
 
 # Class of yieldPlayer
 class yieldPlayer(player):
+    # Constructor
     def __init__(self, name):
         super().__init__(name)
 
-    def playCard(self, trick,game): # added game itself, the AI needs that, even if isn't used here.
+    # Decide which cards can be played
+    def playCard(self, trick, game): 
+        # Check if trick is empty
         if len(trick) != 0:
             # Figure out what was led and follow it if we can
             suit = trick[0][0]
-            # get a list of all valid cards
+
+            # Create a list and populate it with all valid cards
             legalCards=[]
             for card in self.hand:
-                if card[0]==suit:
+                if card[0] == suit:
                     legalCards.append(card)
-                    # if it has anything, reveal only the legal cards.
+                    
+            # Reveal all legal cards, if they exist
             if len(legalCards)>0:
                 return legalCards
-            # If the trick is empty or if we can't follow suit, reveal hand
+        
+        # If the trick is empty or if we can't follow suit, reveal hand
         return self.hand
 
-    # special function only used by this class.
-    def removeCard(self,card):
+    # Remove card from hand
+    def removeCard(self, card):
+        # Check if card in hard
         if card not in self.hand:
+            # Show error
             print("Err!",card,"not in",self.hand)
-            self.hand.remove(card) # there should be only 1
+        else:
+            # Remove card from hand
+            self.hand.remove(card)
