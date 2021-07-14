@@ -8,7 +8,7 @@ class randomPlayer(player):
         super().__init__(name)
 
     # Decide which card to play
-    def playCard(self, trick,game):
+    def playCard(self, trick, game):
         # Check if trick is empty
         if len(trick) != 0:
             # Figure out what was led and follow it if we can
