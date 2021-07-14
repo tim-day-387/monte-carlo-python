@@ -3,6 +3,7 @@ import abc
 
 # Class for player
 class player(metaclass=abc.ABCMeta):
+    # Constructor
     def __init__(self, name):
         self.name = name
         self.hand = []
