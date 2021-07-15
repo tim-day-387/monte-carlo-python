@@ -13,6 +13,7 @@ from randomPlayer import randomPlayer
 from rolloutPlayer import rolloutPlayer
 from grabAndDuckPlayer import grabAndDuckPlayer
 from mctsPlayer import mctsPlayer
+from randomGrabAndDuckPlayer import randomGrabAndDuckPlayer
 from deck import deck
 from game import game
 
@@ -37,6 +38,8 @@ def playGame(selectedAI):
         players.append(grabAndDuckPlayer("AI"))
     elif playerAI == 1:
         players.append(rolloutPlayer("AI", 0.01))
+    elif playerAI == 2:
+        players.append(randomGrabAndDuckPlayer("AI", 0.1))
     else:
         players.append(mctsPlayer("AI", 0.01))
             
@@ -76,6 +79,8 @@ def playGames(numGames, playerAI, enemyAI):
         print("** Grab And Duck **")
     elif playerAI == 1:
         print("**** Rollouts *****")
+    elif playerAI == 2:
+        print("**** Random G&D ***")
     else:
         print("****** MCTS *******")
 
@@ -85,7 +90,7 @@ def playGames(numGames, playerAI, enemyAI):
           
 # Produce all reports for numGames
 def playAll(numGames):
-    for playerAI in range(0,3):
+    for playerAI in range(0,4):
         for enemyAI in range(0,2):
             playGames(numGames, playerAI, enemyAI)
 
@@ -97,5 +102,5 @@ else:
     random.seed("bababooey")
             
 # Produce report
-playAll(10)
+playAll(20)
 
