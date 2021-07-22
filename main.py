@@ -14,6 +14,7 @@ from rolloutPlayer import rolloutPlayer
 from grabAndDuckPlayer import grabAndDuckPlayer
 from mctsPlayer import mctsPlayer
 from randomGrabAndDuckPlayer import randomGrabAndDuckPlayer
+from mlPlayer import mlPlayer
 from deck import deck
 from game import game
 
@@ -25,9 +26,9 @@ def playGame(selectedAI):
 
     # Decide enemyAI
     if enemyAI == 0:
-        enemyPlayer=randomPlayer
+        enemyPlayer = randomPlayer
     else:
-        enemyPlayer=grabAndDuckPlayer
+        enemyPlayer = grabAndDuckPlayer
 
     # Create games and play them
     players = []
@@ -47,7 +48,7 @@ def playGame(selectedAI):
     theGame = game(players)
 
     # Record result if playerAI wins
-    if theGame.play()[0] == "AI":
+    if theGame.play(False)[0] == "AI":
         result += 1
 
     return result
@@ -102,5 +103,6 @@ else:
     random.seed("bababooey")
             
 # Produce report
-playAll(20)
+# playAll(20)
+mlPlayer("Test")
 

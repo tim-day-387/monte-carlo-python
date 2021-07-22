@@ -1,5 +1,6 @@
 # General Imports
 import random
+import csv
 
 # File Imports
 from deck import deck
@@ -12,7 +13,9 @@ class game:
         self.players = players
         self.played_cards = []  
         self.yieldM = yieldMode   
-        self.quiet = quietMode    
+        self.quiet = quietMode
+        self.cardsPlayed = 0
+        self.trickData = []
         self.HAND_SIZE = 18
         self.ZOMBIE_ARMY = 12
         self.ZOMBIE_ARMY_PENALTY = 20
@@ -134,7 +137,7 @@ class game:
         # While the next player to play can play, form trick, get card from players, score trick.
         while len(self.players[(leader+len(trick))%3].hand) > 0: 
             # Fixed the length of the trick
-            startAt=len(trick)
+            startAt = len(trick)
 
             # Have each player play cards
             for i in range(startAt,len(self.players)):
@@ -144,7 +147,7 @@ class game:
                 # Check if in yieldMode
                 if self.yieldM:
                     # If yes, get the legal cards
-                    legalCards=self.players[p_idx].playCard(trick,self) 
+                    legalCards = self.players[p_idx].playCard(trick,self) 
 
                     # Yield to let game master choose card, using the information the player knows
                     chosenCard = yield (False, p_idx, legalCards, trick, self.played_cards)
@@ -156,7 +159,14 @@ class game:
                     trick.append(chosenCard)
                 else:
                     # If not using yield players, ping player directly (sends whole game over)
-                    trick.append(self.players[p_idx].playCard(trick,self))
+                    hand = self.players[p_idx].hand.copy()
+                    card = self.players[p_idx].playCard(trick,self)
+                    trick.append(card)
+
+                    # Record hand and cards played
+                    if p_idx == 2:
+                        self.trickData.insert(self.cardsPlayed, [hand, card, -1])
+                        self.cardsPlayed += 1
 
             # Show who lead the trick
             self.slp(self.players[leader].name, "led:", trick)
@@ -230,7 +240,7 @@ class game:
                    self.players[1].score, self.players[2].score)
 
     # Play a hand of the card game Monster (can start mid-trick, can't use yield players)
-    def play(self):
+    def play(self, writeFeatures):
         lead_player = 0
 
         # Keep looping hands until we have winner
@@ -243,12 +253,28 @@ class game:
 
             # Get the result of hand from generator
             try: 
-                result = next(thisHand) 
+                result = next(thisHand)
             except StopIteration:
                 print("Didn't stop successfully.")
 
             # If the hand had someone win, return who won, everyone's score.    
             if result[1] == True:
+                # Find if the AI won
+                if self.players[result[2]].name == "AI":
+                    win = True
+                else:
+                    win = False
+
+                # Population trick data
+                for i in range(0, len(self.trickData)):
+                    self.trickData[i][2] = win;
+
+                # Writing to csv file
+                filename = 'data.csv'
+                with open(filename, 'a') as csvfile: 
+                    csvwriter = csv.writer(csvfile) 
+                    csvwriter.writerows(self.trickData)
+                
                 # Return information 
                 return (self.players[result[2]].name, self.players[0].score,
                         self.players[1].score, self.players[2].score)

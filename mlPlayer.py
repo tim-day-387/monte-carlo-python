@@ -1,5 +1,7 @@
 # File Imports
 from player import player
+from grabAndDuckPlayer import grabAndDuckPlayer
+from game import game
 
 # Class for mlPlayer
 class mlPlayer(player):
@@ -19,6 +21,14 @@ class mlPlayer(player):
         # Create file
         fp = open(filename, 'w')
         fp.close()
+
+        # Create the game and play it, while writing results to csv
+        players = []
+        players.append(grabAndDuckPlayer("Foo"))
+        players.append(grabAndDuckPlayer("AI"))        
+        players.append(grabAndDuckPlayer("Bar"))
+        theGame = game(players)
+        theGame.play(True)
         
     # Decide which card to play
     def playCard(self, trick, game):
