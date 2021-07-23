@@ -2,6 +2,7 @@
 from pandas import read_csv
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
 
 # File Imports
 from player import player
@@ -16,7 +17,7 @@ class mlPlayer(player):
         super().__init__(name)
 
         # Create model
-        self.model = mlPlayer.train()
+        self.model = mlPlayer.recursiveTrain(0)
 
     # Play a set number of games and record the results
     @staticmethod
@@ -29,9 +30,10 @@ class mlPlayer(player):
             players.append(grabAndDuckPlayer("Bar"))
             theGame = game(players)
             theGame.play(True)
-        
+
     # Train the model using epochs
-    def train():
+    @staticmethod
+    def recursiveTrain(numEpochs):
         # Set filenames
         filename = "data.csv"
 
@@ -39,8 +41,14 @@ class mlPlayer(player):
         fp = open(filename, 'w')
         fp.close()
 
-        # Play initial games
-        mlPlayer.playGames(grabAndDuckPlayer, 6000)
+        # Initial epoch
+        return mlPlayer.train(grabAndDuckPlayer)
+    
+    # Train the model
+    @staticmethod
+    def train(player):
+        # Play games
+        mlPlayer.playGames(player, 100)
 
         # Load data
         dataset = read_csv("./data.csv", names=["Deck","Win","Card"])
@@ -52,8 +60,13 @@ class mlPlayer(player):
         Xt, Xv, yt, yv = train_test_split(X, y, test_size = 0.20, random_state = 1)
 
         # Train model
-        model = RandomForestClassifier(n_estimators = 100)
+        model = RandomForestClassifier(n_estimators = 10)
         model.fit(Xt, yt)
+
+        # Validate
+        val_pred = model.predict(Xv)
+        print("Model accuracy:")
+        print(accuracy_score(yv, val_pred)) 
 
         return model
         
@@ -82,11 +95,7 @@ class mlPlayer(player):
                 if((self.hand[i][0] == card[0]) & (self.hand[i][1] == card[1])):
                     card_idx = i
                     break
-
-            if card_idx == 0:
-                print("Not found!")
-            else:
-                print("Found!")
+                
             return self.hand.pop(card_idx)
         
         # If the trick is empty or if we can't follow suit, return anything
