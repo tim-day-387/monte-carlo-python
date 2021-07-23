@@ -165,7 +165,7 @@ class game:
 
                     # Record hand and cards played
                     if p_idx == 2:
-                        self.trickData.insert(self.cardsPlayed, [hand, card, -1])
+                        self.trickData.insert(self.cardsPlayed, [hash(tuple(hand)), -1, card])
                         self.cardsPlayed += 1
 
             # Show who lead the trick
@@ -267,13 +267,14 @@ class game:
 
                 # Population trick data
                 for i in range(0, len(self.trickData)):
-                    self.trickData[i][2] = win;
+                    self.trickData[i][1] = win;
 
-                # Writing to csv file
-                filename = 'data.csv'
-                with open(filename, 'a') as csvfile: 
-                    csvwriter = csv.writer(csvfile) 
-                    csvwriter.writerows(self.trickData)
+                # Writing to csv file, if selected
+                if writeFeatures:
+                    filename = 'data.csv'
+                    with open(filename, 'a') as csvfile: 
+                        csvwriter = csv.writer(csvfile) 
+                        csvwriter.writerows(self.trickData)
                 
                 # Return information 
                 return (self.players[result[2]].name, self.players[0].score,
