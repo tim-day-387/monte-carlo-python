@@ -41,6 +41,8 @@ def playGame(selectedAI):
         players.append(rolloutPlayer("AI", 0.01))
     elif playerAI == 2:
         players.append(randomGrabAndDuckPlayer("AI", 0.1))
+    elif playerAI == 3:
+        players.append(mlPlayer("AI"))
     else:
         players.append(mctsPlayer("AI", 0.01))
             
@@ -82,6 +84,8 @@ def playGames(numGames, playerAI, enemyAI):
         print("**** Rollouts *****")
     elif playerAI == 2:
         print("**** Random G&D ***")
+    elif playerAI == 3:
+        print("******* ML ********")
     else:
         print("****** MCTS *******")
 
@@ -104,5 +108,5 @@ else:
             
 # Produce report
 # playAll(20)
-mlPlayer("Test")
-
+# mlPlayer("Test")
+playGames(1,3,0)
