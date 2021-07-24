@@ -89,7 +89,7 @@ class mlPlayer(player):
         mlPlayer.playGames(player, 100)
 
         # Load data
-        dataset = read_csv("./data.csv", names=["Deck","Win","Card"])
+        dataset = read_csv("./data.csv", names=["Deck","Card","Results"])
 
         # Create validation dataset
         array = dataset.values                                  
@@ -109,7 +109,7 @@ class mlPlayer(player):
         return model
         
     # Decide which card to play
-    def playCard(self, trick, game):
+    def playCardAlt(self, trick, game):
         # Check if trick is empty
         if len(trick) != 0:
             card_idx = self.metaPredict()
@@ -120,32 +120,29 @@ class mlPlayer(player):
         return self.hand.pop()
     
     # Decide which card to play
-    def playCardAlt(self, trick, game):
+    def playCard(self, trick, game):
         # Check if trick is empty
         if len(trick) != 0:
-            # Generate sample
-            sample = [[hash(tuple(self.hand.copy())), True]]
+            results = [0]*len(self.hand);
+            card_idx = None;
 
-            # Make prediction and convert to string
-            cardString = self.model.predict(sample)[0]
-
-            # Extract card from string
-            if len(cardString) == 8:
-                suit = cardString[2:3]
-                num = int(cardString[6:7])
-            else:
-                suit = cardString[2:3]
-                num = int(cardString[6:8])
-                
-            card = (suit, num)
+            # Get suit
+            suit = trick[0][0]
             
-            card_idx = 0
+            # Get the results for each card
             for i in range(0, len(self.hand)):
-                if((self.hand[i][0] == card[0]) & (self.hand[i][1] == card[1])):
-                    card_idx = i
-                    break
+                # Generate sample
+                sample = [[hash(tuple(self.hand.copy())), hash(self.hand[i])]]
+                           
+                # Make prediction and convert to string
+                results[i] = self.model.predict(sample)[0]
+
+                # Find winning card of matching suit, or play any losing card
+                for i in range(0, len(self.hand)):
+                    if(self.hand[i][0] == suit):
+                        card_idx = i
+                        if(results[i] == 1):
+                            return self.hand.pop(card_idx)
                 
-            return self.hand.pop(card_idx)
-        
         # If the trick is empty or if we can't follow suit, return anything
         return self.hand.pop()
