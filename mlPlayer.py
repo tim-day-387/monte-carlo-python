@@ -3,6 +3,7 @@ from pandas import read_csv
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
+import random
 
 # File Imports
 from player import player
@@ -30,7 +31,44 @@ class mlPlayer(player):
             players.append(grabAndDuckPlayer("Bar"))
             theGame = game(players)
             theGame.play(True)
+            
+    # Try to predict a card that is in the hand
+    def metaPredict(self):
+        card_idx = -1
+        hand = self.hand.copy()
+        
+        for i in range(0, 10):
+            # Generate sample
+            sample = [[hash(tuple(hand)), True]]
 
+            # Make prediction and convert to string
+            cardString = self.model.predict(sample)[0]
+
+            # Extract card from string
+            if len(cardString) == 8:
+                suit = cardString[2:3]
+                num = int(cardString[6:7])
+            else:
+                suit = cardString[2:3]
+                num = int(cardString[6:8])
+                
+            card = (suit, num)
+        
+            for i in range(0, len(hand)):
+                if((hand[i][0] == card[0]) & (hand[i][1] == card[1])):
+                    card_idx = i
+                    break
+
+            if(card_idx != -1):
+                break
+            else:
+                random.shuffle(hand)
+            
+        if(card_idx == -1):
+            card_idx = 0
+            
+        return card_idx
+    
     # Train the model using epochs
     @staticmethod
     def recursiveTrain(numEpochs):
@@ -72,6 +110,17 @@ class mlPlayer(player):
         
     # Decide which card to play
     def playCard(self, trick, game):
+        # Check if trick is empty
+        if len(trick) != 0:
+            card_idx = self.metaPredict()
+            
+            return self.hand.pop(card_idx)
+        
+        # If the trick is empty or if we can't follow suit, return anything
+        return self.hand.pop()
+    
+    # Decide which card to play
+    def playCardAlt(self, trick, game):
         # Check if trick is empty
         if len(trick) != 0:
             # Generate sample
