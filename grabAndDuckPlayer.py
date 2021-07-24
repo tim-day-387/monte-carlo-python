@@ -92,7 +92,7 @@ class grabAndDuckPlayer(player):
         return ret
 
     # Decide what card to play
-    def playCard(self, trick,game):
+    def playCard(self, trick, game):
         # Check if starting trick
         if len(trick) != 0:
             # If one card, play it.
