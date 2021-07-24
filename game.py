@@ -21,6 +21,49 @@ class game:
         self.ZOMBIE_ARMY_PENALTY = 20
         self.WIN_SCORE = 200
         
+    # Convert card to a number
+    @staticmethod
+    def convertCard(cardTuple):
+        card = cardTuple[1]
+        if cardTuple[0] == "Z":
+            card = card
+        elif cardTuple[0] == "U":
+            card = card + 15
+        elif cardTuple[0] == "T":
+            card = card + 30
+        elif cardTuple[0] == "F":
+            card = card + 45
+        
+        return card
+
+    # Get features from info
+    @staticmethod
+    def getFeatures(cardTuple, hand, played, includeWin):
+        # Save card, convert card to number
+        card = game.convertCard(cardTuple)
+
+        # Decide length of features
+        if includeWin:
+            features = [0]*(60+2)
+            features[61] = -1
+        else:
+            features = [0]*(60+1)
+
+        # Set card
+        features[60] = card
+
+        # Set cards from hand
+        for i in range(0, len(hand)):
+            cardNum = game.convertCard(hand[i])
+            features[cardNum] = 1
+
+        # Get cards that have been played
+        for i in range(0, len(played)):
+            cardNum = game.convertCard(played[i])
+            features[cardNum] = 2
+
+        return features
+
     # Helper function to make an imaginary version of the game
     def makeVirtualGameCopy(self, thisTrick):
         # Make virtual players
@@ -158,14 +201,20 @@ class game:
                     # Append to trick
                     trick.append(chosenCard)
                 else:
-                    # If not using yield players, ping player directly (sends whole game over)
+                    # Save hand, card, convert card to number
                     hand = self.players[p_idx].hand.copy()
-                    card = self.players[p_idx].playCard(trick,self)
-                    trick.append(card)
+                    cardTuple = self.players[p_idx].playCard(trick, self)
+
+                    # Saved played cards
+                    played = self.played_cards.copy()
+
+                    # Append card to trick
+                    trick.append(cardTuple)
 
                     # Record hand and cards played
                     if p_idx == 2:
-                        self.trickData.insert(self.cardsPlayed, [hash(tuple(hand)), hash(card), -1])
+                        features = game.getFeatures(cardTuple, hand, played, True)
+                        self.trickData.insert(self.cardsPlayed, features)
                         self.cardsPlayed += 1
 
             # Show who lead the trick
@@ -267,7 +316,7 @@ class game:
 
                 # Population trick data
                 for i in range(0, len(self.trickData)):
-                    self.trickData[i][2] = win;
+                    self.trickData[i][61] = win;
 
                 # Writing to csv file, if selected
                 if writeFeatures:

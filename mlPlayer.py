@@ -89,11 +89,11 @@ class mlPlayer(player):
         mlPlayer.playGames(player, 100)
 
         # Load data
-        dataset = read_csv("./data.csv", names=["Deck","Card","Results"])
+        dataset = read_csv("./data.csv", header=None)
 
         # Create validation dataset
         array = dataset.values                                  
-        X = array[:,0:-1]                                       
+        X = array[:,0:-1]
         y = array[:,-1]                                         
         Xt, Xv, yt, yv = train_test_split(X, y, test_size = 0.20, random_state = 1)
 
@@ -132,10 +132,13 @@ class mlPlayer(player):
             # Get the results for each card
             for i in range(0, len(self.hand)):
                 # Generate sample
-                sample = [[hash(tuple(self.hand.copy())), hash(self.hand[i])]]
+                cardTuple = self.hand[i]
+                hand = self.hand.copy()
+                played = game.played_cards.copy()
+                sample = game.getFeatures(cardTuple, hand, played, False)
                            
                 # Make prediction and convert to string
-                results[i] = self.model.predict(sample)[0]
+                results[i] = self.model.predict([sample])[0]
 
                 # Find winning card of matching suit, or play any losing card
                 for i in range(0, len(self.hand)):
