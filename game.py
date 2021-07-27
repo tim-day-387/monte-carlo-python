@@ -4,7 +4,7 @@ import csv
 
 # File Imports
 from deck import deck
-from yieldPlayer import yieldPlayer
+from player import yieldPlayer
 
 # Class for game
 class game:

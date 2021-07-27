@@ -8,13 +8,13 @@ from multiprocessing import Pool
 
 # File Imports
 from player import player
-from yieldPlayer import yieldPlayer
-from randomPlayer import randomPlayer
-from rolloutPlayer import rolloutPlayer
-from grabAndDuckPlayer import grabAndDuckPlayer
-from mctsPlayer import mctsPlayer
-from randomGrabAndDuckPlayer import randomGrabAndDuckPlayer
-from mlPlayer import mlPlayer
+from player import yieldPlayer
+from player import randomPlayer
+from player import rolloutPlayer
+from player import grabAndDuckPlayer
+from player import mctsPlayer
+from player import randomGrabAndDuckPlayer
+from player import mlPlayer
 from deck import deck
 from game import game
 
@@ -26,9 +26,9 @@ def playGame(selectedAI):
 
     # Decide enemyAI
     if enemyAI == 0:
-        enemyPlayer = randomPlayer
+        enemyPlayer = randomPlayer.randomPlayer
     else:
-        enemyPlayer = grabAndDuckPlayer
+        enemyPlayer = grabAndDuckPlayer.grabAndDuckPlayer
 
     # Create games and play them
     players = []
@@ -36,15 +36,15 @@ def playGame(selectedAI):
 
     # Decide playerAI type
     if playerAI == 0:
-        players.append(grabAndDuckPlayer("AI"))
+        players.append(grabAndDuckPlayer.grabAndDuckPlayer("AI"))
     elif playerAI == 1:
-        players.append(rolloutPlayer("AI", 0.01))
+        players.append(rolloutPlayer.rolloutPlayer("AI", 0.01))
     elif playerAI == 2:
-        players.append(randomGrabAndDuckPlayer("AI", 0.1))
+        players.append(randomGrabAndDuckPlayer.randomGrabAndDuckPlayer("AI", 0.1))
     elif playerAI == 3:
-        players.append(mlPlayer("AI"))
+        players.append(mlPlayer.mlPlayer("AI"))
     else:
-        players.append(mctsPlayer("AI", 0.01))
+        players.append(mctsPlayer.mctsPlayer("AI", 0.01))
             
     players.append(enemyPlayer("Bar"))
     theGame = game(players)
