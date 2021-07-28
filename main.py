@@ -7,16 +7,9 @@ import math as m
 from multiprocessing import Pool
 
 # File Imports
-from player import player
-from player import yieldPlayer
-from player import randomPlayer
-from player import rolloutPlayer
-from player import grabAndDuckPlayer
-from player import mctsPlayer
-from player import randomGrabAndDuckPlayer
-from player import mlPlayer
-from deck import deck
+from player import *
 from game import game
+from game import deck
 
 # Play one game
 def playGame(selectedAI):
@@ -47,7 +40,7 @@ def playGame(selectedAI):
         players.append(mctsPlayer.mctsPlayer("AI", 0.01))
             
     players.append(enemyPlayer("Bar"))
-    theGame = game(players)
+    theGame = game.game(players)
 
     # Record result if playerAI wins
     if theGame.play(False)[0] == "AI":
@@ -107,6 +100,5 @@ else:
     random.seed("bababooey")
             
 # Produce report
-# playAll(20)
+playAll(1)
 # mlPlayer("Test")
-playGames(1,3,0)

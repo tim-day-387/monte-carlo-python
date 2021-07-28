@@ -29,14 +29,14 @@ class mlPlayer(player.player):
             players.append(grabAndDuckPlayer.grabAndDuckPlayer("Foo"))
             players.append(playerType("AI"))        
             players.append(grabAndDuckPlayer.grabAndDuckPlayer("Bar"))
-            theGame = game(players)
+            theGame = game.game(players)
             theGame.play(True)
             
     # Train the model using epochs
     @staticmethod
     def recursiveTrain(numEpochs):
         # Set filenames
-        filename = "data.csv"
+        filename = "./data.csv"
 
         # Create file
         fp = open(filename, 'w')

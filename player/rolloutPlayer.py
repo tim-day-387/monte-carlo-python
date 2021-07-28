@@ -4,9 +4,9 @@ import math as m
 
 # File Imports
 from game import game
+from game import timeAllocator
 from player import player
 from player import yieldPlayer
-from timeAllocator import timeAllocator
 
 # Class for rolloutPlayer
 class rolloutPlayer(player.player):

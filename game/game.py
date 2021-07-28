@@ -3,13 +3,13 @@ import random
 import csv
 
 # File Imports
-from deck import deck
+from game import deck
 from player import yieldPlayer
 
 # Class for game
 class game:
     def __init__(self, players, yieldMode = False, quietMode = True):
-        self.deck = deck()
+        self.deck = deck.deck()
         self.players = players
         self.played_cards = []  
         self.yieldM = yieldMode   
@@ -67,7 +67,7 @@ class game:
     # Helper function to make an imaginary version of the game
     def makeVirtualGameCopy(self, thisTrick):
         # Make virtual players
-        virPlayers = [yieldPlayer("alice"), yieldPlayer("me"), yieldPlayer("bob")]
+        virPlayers = [yieldPlayer.yieldPlayer("alice"), yieldPlayer.yieldPlayer("me"), yieldPlayer.yieldPlayer("bob")]
         
         # Get the scores and zombie_count
         for i in range(3):
