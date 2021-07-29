@@ -4,7 +4,6 @@ import csv
 
 # File Imports
 from game import deck
-from player import yieldPlayer
 
 # Class for game
 class game:
@@ -65,10 +64,7 @@ class game:
         return features
 
     # Helper function to make an imaginary version of the game
-    def makeVirtualGameCopy(self, thisTrick):
-        # Make virtual players
-        virPlayers = [yieldPlayer.yieldPlayer("alice"), yieldPlayer.yieldPlayer("me"), yieldPlayer.yieldPlayer("bob")]
-        
+    def makeVirtualGameCopy(self, thisTrick, virPlayers):
         # Get the scores and zombie_count
         for i in range(3):
             virPlayers[i].score = self.players[i].score
@@ -212,7 +208,7 @@ class game:
                     trick.append(cardTuple)
 
                     # Record hand and cards played
-                    if p_idx == 2:
+                    if p_idx == 1:
                         features = game.getFeatures(cardTuple, hand, played, True)
                         self.trickData.insert(self.cardsPlayed, features)
                         self.cardsPlayed += 1
@@ -309,10 +305,11 @@ class game:
             # If the hand had someone win, return who won, everyone's score.    
             if result[1] == True:
                 # Find if the AI won
-                if self.players[result[2]].name == "AI":
-                    win = 1
-                else:
-                    win = 0
+                # if self.players[result[2]].name == "AI":
+                #     win = 1
+                # else:
+                #     win = 0
+                win = self.players[1].score
 
                 # Population trick data
                 for i in range(0, len(self.trickData)):

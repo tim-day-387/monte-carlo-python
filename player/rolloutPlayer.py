@@ -53,7 +53,8 @@ class rolloutPlayer(player.player):
         # Loop until time has finished
         while time.process_time() < terminateBy:
             # Make copy of game
-            temp = game.makeVirtualGameCopy(trick)
+            virPlayers = [yieldPlayer.yieldPlayer("alice"), yieldPlayer.yieldPlayer("me"), yieldPlayer.yieldPlayer("bob")]
+            temp = game.makeVirtualGameCopy(trick, virPlayers)
 
             # Get the game generator object.
             gameGen = temp[0]

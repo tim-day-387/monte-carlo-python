@@ -169,7 +169,8 @@ class mctsPlayer(player.player):
             myTree = tree 
             
             # Get the game generator object, save Alice and bob's hands, get rid of temporary object
-            temp = game.makeVirtualGameCopy(trick)
+            virPlayers = [yieldPlayer.yieldPlayer("alice"), yieldPlayer.yieldPlayer("me"), yieldPlayer.yieldPlayer("bob")]
+            temp = game.makeVirtualGameCopy(trick, virPlayers)
             gameGen = temp[0] 
             move1 = (temp[1],temp[2]) 
             del temp
