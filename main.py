@@ -102,8 +102,8 @@ else:
     random.seed("bababooey")
             
 # Produce report
-model = trainModel.recursiveTrain(0, True, 100)
-# playGames(100, 3, 0, model)
+model = trainModel.recursiveTrain(0, True, 1000)
+playGames(50, 3, 1, model)
 # playAll(1, model)
 # mlPlayer("Test")
 # for i in range(0, 100):
