@@ -6,7 +6,7 @@ class grabAndDuckPlayer(player.player):
     # Constructor
     def __init__(self, name):
         super().__init__(name)
-
+        
     # Determines card priority
     @staticmethod
     def trollKey(card):

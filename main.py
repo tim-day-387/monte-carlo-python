@@ -10,12 +10,14 @@ from multiprocessing import Pool
 from player import *
 from game import game
 from game import deck
+from trainModel import trainModel
 
 # Play one game
 def playGame(selectedAI):
     result = 0
     playerAI = selectedAI[0]
     enemyAI = selectedAI[1]
+    model = selectedAI[2]
 
     # Decide enemyAI
     if enemyAI == 0:
@@ -35,7 +37,7 @@ def playGame(selectedAI):
     elif playerAI == 2:
         players.append(randomGrabAndDuckPlayer.randomGrabAndDuckPlayer("AI", 0.1))
     elif playerAI == 3:
-        players.append(mlPlayer.mlPlayer("AI"))
+        players.append(mlPlayer.mlPlayer("AI", model))
     else:
         players.append(mctsPlayer.mctsPlayer("AI", 0.01))
             
@@ -49,9 +51,9 @@ def playGame(selectedAI):
     return result
     
 # Return results of a set of games
-def playGames(numGames, playerAI, enemyAI):
+def playGames(numGames, playerAI, enemyAI, model):
     results = 0
-    selectedAI = [playerAI, enemyAI];
+    selectedAI = [playerAI, enemyAI, model];
 
     # Start Timer
     timeElapsed = time.perf_counter()
@@ -62,7 +64,7 @@ def playGames(numGames, playerAI, enemyAI):
         selectionList.append(selectedAI)
 
     # Perform multiprocessing
-    totalProcs = min(numGames*2, 256)
+    totalProcs = min(numGames*2, 4)
     pool = Pool(processes = totalProcs)
     outputs = pool.map(playGame, selectionList)
     results = sum(outputs)
@@ -87,10 +89,10 @@ def playGames(numGames, playerAI, enemyAI):
     print("Time: ", timeElapsed)
           
 # Produce all reports for numGames
-def playAll(numGames):
+def playAll(numGames, model):
     for playerAI in range(0,4):
         for enemyAI in range(0,2):
-            playGames(numGames, playerAI, enemyAI)
+            playGames(numGames, playerAI, enemyAI, model)
 
 # Set Seeds
 numArgs = len(sys.argv[1:])
@@ -100,5 +102,9 @@ else:
     random.seed("bababooey")
             
 # Produce report
-playAll(1)
+model = trainModel.recursiveTrain(0, True, 100)
+# playGames(100, 3, 0, model)
+# playAll(1, model)
 # mlPlayer("Test")
+# for i in range(0, 100):
+#      playGame([3, 1, model])
