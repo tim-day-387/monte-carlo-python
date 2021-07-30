@@ -20,7 +20,7 @@ class rolloutPlayer(player.player):
             self.allocator = False  
         else:
             # priorityMul => how much more time given than "fair" in worst case
-            self.allocator = timeAllocator(18,priorityMul=1.1)
+            self.allocator = timeAllocator.timeAllocator(18,priorityMul=1.1)
 
         # Set remaining parameters
         self.TIME_GIVEN = TIME_GIVEN
