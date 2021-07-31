@@ -1,4 +1,5 @@
 # General Imports
+import cython
 import random
 import csv
 
@@ -105,7 +106,8 @@ class game:
         if self.quiet:
             return
         else:
-            print(*args,**kwargs)
+            print("")
+            # print(*args,**kwargs)
 
     # Deals out virtual set of cards to players, player about to play gets the knownHand.
     # Assumes first player goes first this trick.
