@@ -4,7 +4,7 @@ import random
 import csv
 
 # File Imports
-from game import deck
+import deck
 
 # Class for game
 class game:
