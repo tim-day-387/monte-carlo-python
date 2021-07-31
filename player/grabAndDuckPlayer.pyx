@@ -1,5 +1,8 @@
+# General Imports
+import cython
+
 # File Imports
-from player import player
+import player
 
 # Class for grabAndDuckPlayer
 class grabAndDuckPlayer(player.player):
