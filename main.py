@@ -4,6 +4,7 @@ import abc
 import time
 import sys
 import math as m
+from tabulate import tabulate
 from multiprocessing import Pool
 
 # File Imports
@@ -94,48 +95,43 @@ def playGames(numGames, playerAI, enemyAI, model):
     # End Timer
     timeElapsed = time.perf_counter() - timeElapsed
     
-    # Decide playerAI type
-    if playerAI == 0:
-        print("****** MCTS *******")
-    elif playerAI == 1:
-        print("** Grab And Duck **")
-    elif playerAI == 2:
-        print("**** Rollouts *****")
-    elif playerAI == 3:
-        print("**** Random G&D ***")
-    elif playerAI == 4:
-        print("******* ML ********")
-    elif playerAI == 5:
-        print("*** ML Rollouts ***")
-    else:
-        print("***** Random ******")
-
-    # Decide enemyAI type
-    if enemyAI == 0:
-        print("vs: MCTS")
-    elif enemyAI == 1:
-        print("vs: Grab And Duck")
-    elif enemyAI == 2:
-        print("vs: Rollouts")
-    elif enemyAI == 3:
-        print("vs: Random G&D")
-    elif enemyAI == 4:
-        print("vs: ML")
-    elif enemyAI == 5:
-        print("vs: ML Rollouts")
-    else:
-        print("vs: Random")
-
     # Return results
-    print("AI win rate: ", 100*(results/numGames),"% or",results,"over",numGames)
-    print("Time: ", timeElapsed)
+    return (100*(results/numGames), timeElapsed)
           
 # Produce all reports for numGames
 def playAll(numGames, model):
-    for playerAI in range(0,6):
-        for enemyAI in [1, 3, 4, 6]:
-            playGames(numGames, playerAI, enemyAI, model)
+    # Define headers
+    headers = ["Enemy", "MCTS", "Grab & Duck", "Rollouts", "Random G&D", "ML", "ML Rollouts", "Random"]
 
+    # Define list
+    data = [[None]*8,[None]*8,[None]*8,[None]*8]
+    data[0][0] = "Grab & Duck"
+    data[1][0] = "Random G&D"
+    data[2][0] = "ML"
+    data[3][0] = "Random"
+    
+    # Play all games
+    for playerAI in range(0,7):
+        for enemyAI in [1, 3, 4, 6]:
+            # Get results from game
+            results = playGames(numGames, playerAI, enemyAI, model)
+
+            # Get row
+            if enemyAI == 1:
+                row = 0
+            elif enemyAI == 3:
+                row = 1
+            elif enemyAI == 4:
+                row = 2
+            elif enemyAI == 6:
+                row = 3
+
+            # Input data
+            data[row][playerAI+1] = results[0]
+
+    # Show table
+    print(tabulate(data, headers))
+            
 # Set Seeds
 numArgs = len(sys.argv[1:])
 if numArgs != 0:
@@ -144,9 +140,8 @@ else:
     random.seed("bababooey")
             
 # Produce report
-model = trainModel.recursiveTrain(0, True, 1000)
-playGames(50, 5, 1, model)
-# playAll(50, model)
+model =  trainModel.recursiveTrain(0, True, 1000)
+playAll(50, model)
 # mlPlayer("Test")
 # for i in range(0, 100):
 #      playGame([3, 1, model])

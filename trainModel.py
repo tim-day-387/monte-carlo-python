@@ -62,7 +62,8 @@ class trainModel():
         if(verbose):
             val_pred = model.predict(Xv)
             print("Model accuracy:")
-            print(accuracy_score(yv, val_pred)) 
+            print(accuracy_score(yv, val_pred))
+            print("")
 
         return model
 
