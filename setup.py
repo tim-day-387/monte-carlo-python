@@ -4,5 +4,6 @@ from Cython.Build import cythonize
 
 # Setup
 setup(
-    ext_modules = cythonize(["./game/deck.pyx", "./game/game.pyx"]),
+    ext_modules = cythonize(["./game/deck.pyx", "./game/game.pyx", "./game/timeAllocator.pyx", \
+                             ]),
 )

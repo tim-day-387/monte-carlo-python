@@ -1,3 +1,6 @@
+# General Imports
+import cython
+
 # Class for timeAllocator
 class timeAllocator:
     # Constructor
