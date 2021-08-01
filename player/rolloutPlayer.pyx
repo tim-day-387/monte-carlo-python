@@ -1,12 +1,13 @@
 # General Imports
 import time
 import math as m
+import cython
 
 # File Imports
 from game import game
 from game import timeAllocator
-from player import player
-from player import yieldPlayer
+import player
+import yieldPlayer
 
 # Class for rolloutPlayer
 class rolloutPlayer(player.player):

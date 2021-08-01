@@ -1,5 +1,8 @@
+# General Imports
+import cython
+
 # File Imports
-from player import player
+import player
 
 # Class of yieldPlayer
 class yieldPlayer(player.player):

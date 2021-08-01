@@ -1,8 +1,9 @@
-# File Imports
-from player import player
-
 # General Imports
 from random import *
+import cython
+
+# File Imports
+import player
 
 # Class for grabAndDuckPlayer
 class randomGrabAndDuckPlayer(player.player):

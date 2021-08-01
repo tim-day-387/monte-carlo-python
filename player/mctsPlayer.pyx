@@ -1,12 +1,13 @@
 # General Imports
 import time
 import math as m
+import cython
 
 # File Imports
 from game import game
 from game import timeAllocator
-from player import player
-from player import yieldPlayer
+import player
+import yieldPlayer
 
 # Class for mctsPlayer
 class mctsPlayer(player.player):
@@ -284,7 +285,7 @@ class mctsPlayer(player.player):
         # If we need to tell about how deep we got, do it now
         if self.barfMode == True:
             # Print hand size and depth
-            print("hand size:",len(self.hand),"deepest with at least 10 simulations,", end=" ")
+            # print("hand size:",len(self.hand),"deepest with at least 10 simulations,", end=" ")
 
             # Decide what to print based on number of rootSimulations
             if rootSimulations < 10:
