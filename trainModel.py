@@ -22,6 +22,18 @@ class trainModel():
             players.append(grabAndDuckPlayer.grabAndDuckPlayer("Bar"))
             theGame = game.game(players)
             theGame.play(True)
+
+    # Play a set number of games with the mlPlayer and record the results
+    @staticmethod
+    def playNext(numGames, model):
+        # Create the games and play them, while writing results to csv
+        for n in range(0,numGames):
+            players = []
+            players.append(grabAndDuckPlayer.grabAndDuckPlayer("Foo"))
+            players.append(mlPlayer.mlPlayer("AI", model))        
+            players.append(grabAndDuckPlayer.grabAndDuckPlayer("Bar"))
+            theGame = game.game(players)
+            theGame.play(True)
             
     # Train the model using epochs
     @staticmethod
