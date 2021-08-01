@@ -101,7 +101,11 @@ def playGames(numGames, playerAI, enemyAI, model):
 # Produce all reports for numGames
 def playAll(numGames, model):
     # Define headers
-    headers = ["Enemy", "MCTS", "Grab & Duck", "Rollouts", "Random G&D", "ML", "ML Rollouts", "Random"]
+    headers = ["Enemy", "MCTS", "Grab & Duck", "Rollouts", \
+               "Random G&D", "ML", "ML Rollouts", "Random"]
+
+    # Define Metrics
+    totalTime = 0; 
 
     # Define list
     data = [[None]*8,[None]*8,[None]*8,[None]*8]
@@ -128,9 +132,13 @@ def playAll(numGames, model):
 
             # Input data
             data[row][playerAI+1] = results[0]
+            totalTime = totalTime + results[1]
 
-    # Show table
+    # Show table and results
     print(tabulate(data, headers))
+    print("")
+    print("Total time:")
+    print(totalTime)
             
 # Set Seeds
 numArgs = len(sys.argv[1:])
@@ -140,9 +148,15 @@ else:
     random.seed("bababooey")
             
 # Produce report
-# model =  trainModel.recursiveTrain(0, True, 1000)
-# playAll(50, model)
+#model =  trainModel.recursiveTrain(0, True, 1000)
+#playAll(50, model)
 # mlPlayer("Test")
-for i in range(0, 1000):
-     playGame([1, 1, None])
+# for i in range(0, 1000):
+#      playGame([1, 1, None])
+# print(playGames(1000000, 1, 1, None))
 
+# model = trainModel.recursiveTrain(0, True, 1000, None)
+
+# for i in range(0,100):
+#     print(playGames(30, 4, 10, model))
+#     model = trainModel.recursiveTrain(0, True, 100, model)

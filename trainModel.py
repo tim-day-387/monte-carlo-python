@@ -37,7 +37,7 @@ class trainModel():
             
     # Train the model using epochs
     @staticmethod
-    def recursiveTrain(numEpochs, verbose, size):
+    def recursiveTrain(numEpochs, verbose, size, model):
         # Set filenames
         filename = "./data.csv"
 
@@ -46,16 +46,19 @@ class trainModel():
         fp.close()
 
         # Initial epoch
-        model = trainModel.train(verbose, size)
+        model = trainModel.train(verbose, size, model)
 
         # Return completed model
         return model
     
     # Train the model
     @staticmethod
-    def train(verbose, size):
+    def train(verbose, size, model):
         # Play games
-        trainModel.playInitial(size)
+        if(model == None):
+            trainModel.playInitial(size)
+        else:
+            trainModel.playNext(size, model)
 
         # Load data
         dataset = read_csv("./data.csv", header=None)
