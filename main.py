@@ -148,15 +148,8 @@ else:
     random.seed("bababooey")
             
 # Produce report
-#model =  trainModel.recursiveTrain(0, True, 1000)
-#playAll(50, model)
+model =  trainModel.recursiveTrain(0, True, 100, None)
+# print(playGames(30, 4, 10, model))
+playAll(50, model)
 # mlPlayer("Test")
-# for i in range(0, 1000):
-#      playGame([1, 1, None])
 # print(playGames(1000000, 1, 1, None))
-
-# model = trainModel.recursiveTrain(0, True, 1000, None)
-
-# for i in range(0,100):
-#     print(playGames(30, 4, 10, model))
-#     model = trainModel.recursiveTrain(0, True, 100, model)
