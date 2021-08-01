@@ -38,15 +38,20 @@ class trainModel():
     # Train the model using epochs
     @staticmethod
     def recursiveTrain(numEpochs, verbose, size, model):
-        # Set filenames
-        filename = "./data.csv"
-
-        # Create file
-        fp = open(filename, 'w')
-        fp.close()
-
         # Initial epoch
-        model = trainModel.train(verbose, size, model)
+        if(verbose):
+            print("Epoch 0")
+        model = trainModel.train(verbose, size, None)
+        
+        # Further epochs
+        if(numEpochs > 1):
+            for i in range(1,numEpochs):
+                # List epoch
+                if(verbose):
+                    print("Epoch", i)
+
+                # Train new epoch
+                model = trainModel.train(verbose, size, model)
 
         # Return completed model
         return model
@@ -54,6 +59,13 @@ class trainModel():
     # Train the model
     @staticmethod
     def train(verbose, size, model):
+        # Set filenames
+        filename = "./data.csv"
+
+        # Create file
+        fp = open(filename, 'w')
+        fp.close()
+        
         # Play games
         if(model == None):
             trainModel.playInitial(size)
