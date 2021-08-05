@@ -5,6 +5,9 @@
 
 This code implements card-playing AI using modern AI/machine learning techniques. This was the solo final project for a graduate AI course. The basic implementation (built earlier in the course) for the card game player is in the rollouts-python repository.
 
+The card game that the AI players play, is a monster-themed variation on the game [Hearts](https://en.wikipedia.org/wiki/Hearts_(card_game)#Preliminaries_2) 
+aptly called Monster.
+
 # Using the Code
 
 Download or clone the repository and install the packages listed in the 'requirements.txt' file. The Cython modules must be built using the command:\
@@ -14,6 +17,13 @@ Download or clone the repository and install the packages listed in the 'require
 Then, the code can be run using the following command:\
 \
 ```python3 main.py```
+
+# Players 
+
+This repository contains code for eight different card-playing AI. The baseline player, and perhaps the simpliest, is Grab And Duck. This is a simple greedy 
+algorithm. It grabs points when it can, and avoids (or ducks) losses when it can. Another AI performs rollouts to make decisions, as often seen in 
+[backgammon opening strategy](https://en.wikipedia.org/wiki/Rollout_(backgammon)). Two AI players use a random-forests model trained on data generated 
+from simulating games of Monster; the first uses the model alone, while the second pairs it with rollouts.  
 
 # Performance Improvements
 
