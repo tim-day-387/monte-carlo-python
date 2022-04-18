@@ -54,6 +54,6 @@ timothy@debian-desktop:~/Downloads/monte-carlo-python$ python3 main.py
 ```
 This images shows the results of 1,000,000 games of Monster, again with
 only Grab And Duck players. The win rate is, understandably, about 1/3.
-The execution time was about 12.5 minutes. Both Cython and multipro-
-cessing allow for a small amount of compute resources (the computer used is
+The execution time was about 12.5 minutes. Both Cython and multiprocessing 
+allow for a small amount of compute resources (the computer used is
 seven or so years old) to go very far.
