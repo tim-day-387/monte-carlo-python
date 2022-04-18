@@ -27,8 +27,8 @@ from simulating games of Monster; the first uses the model alone, while the seco
 
 # Performance Improvements
 
-The implementation of Monster includes a number of improvements to boost perfor-
-mance, extensibility, and readability. The game playing code and the AI
+The implementation of Monster includes a number of improvements to boost performance, 
+extensibility, and readability. The game playing code and the AI
 players have been implement using Cython; this package compiles Python
 in C for a faster execution time on oft-reused code. One-thousand games of
 Monster were played using only Grab and Duck players for a time of:\
